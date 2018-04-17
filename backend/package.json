@@ -1,0 +1,26 @@
+{
+  "name": "campusride",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "express-jwt": "^5.3.1",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "jwks-rsa": "^1.2.1",
+    "moment": "^2.22.0",
+    "morgan": "~1.9.0",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
+    "node-fetch": "^2.1.2",
+    "string-format": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
