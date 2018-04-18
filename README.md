@@ -48,9 +48,17 @@ The main structure of the repository is as below:
     │       ├── schedule.py        # Python helper function for generate test data for auto and cart schedule
     └── README.md
 
-## index
+## Index
 * [Setup and Run](#setup-and-run)
-* [Development Starting Point and Framework](#Development-Starting-Point-and-Framework)
+* [Development Starting Point and Framework](#development-starting-point-and-framework)
+* [Business Rules and Assumptions](#business-rules-and-assumptions)
+* [Web UI](#web-ui)
+* [EERD](#eerd)
+* [Data Dictionary](#data-distionary)
+* [SQL Implementation Details](#sql-implementation-details)
+	* [Stored Procedure](#stored-procedure)
+* [ToDo](#todo)
+* [References](#references)
 
 ## Setup and Run
 
