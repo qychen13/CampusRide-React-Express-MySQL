@@ -1,3 +1,4 @@
+// reference: https://auth0.com/docs/quickstart/spa/react/01-login
 import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from './auth0-variables';
 import history from '../history';
