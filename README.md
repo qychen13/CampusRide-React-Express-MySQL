@@ -59,7 +59,7 @@ The main structure of the repository is as below:
   Using the Dump-CampusRide.sql file to import database in your MySQL server. 
   For the bussiness rule concern, the web UI only supports the query and update for the appointments after current date. And the database dump file only generate the schedule data up to May 2018. In order to support the full functionalities of the application after that time, you should generate more test data for the appropriate dates. Reference to the schedule.py file under test-data-generator directory for the use to generate mysql syntaxes to insert data.
   Start your MySQL server:
-  ```
+  ```bash
   mysqld_safe -u 'mysql'
   ```
   Edit ./backend/utils/database-variables.js file with your MySQL server configuration.
@@ -71,10 +71,10 @@ The main structure of the repository is as below:
 * Backend setup and run
   From the project root directory, 
   
-  ```
+  ```bash
   cd backend
   npm install  # install node pakages for backend
-  mode ./bin/www # run backend server on default port 3000
+  node ./bin/www # run backend server on default port 3000
   
   ```
   
@@ -82,7 +82,7 @@ The main structure of the repository is as below:
 
 * Frontend setup and run
   From the project root directory,
-  ```
+  ```bash
   cd frontend
   npm install # install node pakages
   PORT=3001 npm start # start frontend server on port 3001
@@ -104,11 +104,28 @@ The main structure of the repository is as below:
   
 ## Business Rules and Assumptions
 
-### Campus Ride 
+The system support three kind of user to login, *student*, *driver* and *manager* (admin user). The student can make/change appointment for two kinds of rides, auto ride and golf cart ride. The auto ride has fixed timetable and stops which is free while the golf cart ride can have customized pick-up time and do not have spercific drop off location with more flexibility thus it is chargeable. The driver would be assigned to specific vehicle (including auto and cart) on specific date by manager.
 
-### About Auto Ride
+### Full Use Case
 
-### About Cart Ride
+Student can register and login to the system to make the appointment for golf cart or auto ride. After the ride, they can give the feedback and rate the driver or the ride. Manager (admin user) can login to make schedule for the auto line or golf cart to drivers on specific date. Driver can login to the system to check the schedule and finish the cart ride trip by filling the billing information. 
+
+<p align='center'>
+<img src='./imgs/use-case.jpg' width='600' alt='use case'/>
+</p>
+
+
+### Implemented Parts
+
+For the database, it implements the whole part of the full use case including 12 tables with generalizaiton/specialization relationship. In this web application, due to the time limitation, I only implemented some key functionalities of the student user part, which includes **looking up auto/cart schedule timetable, registration, log in, log out, make/look up/cancel appointments, look up/update profile**. 
+
+### More About Auto Ride
+
+The auto ride has scheduled lines and timetable. Each auto with associated timetable would be assigned to a driver on spercific working day by the manager. After manager's schedule, student can look up and see the scheduled auto ride timetable by choosing the pick up stop, drop off stop and date. Right now, for the test data (which is included in SQL dump file), I use the existing [UNCC Next Ride](http://nextride.uncc.edu/). The stop information is refrenced from https://pats.uncc.edu/transportation/transportation-tracking. The routes in the next ride, gold, silver and green line are corresponding to line 0, 1, 2 in SQL route table. 
+
+### More About Cart Ride
+
+Cart ride and have customizable pick up time and do not need assign the spercific drop off location. Thus, it is more flexible and maybe chargeable. For the pick up communication concern, it should have spercific pick up location at the time making appointment. 
 
 ## Web UI 
 
