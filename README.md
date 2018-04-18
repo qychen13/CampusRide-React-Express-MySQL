@@ -49,8 +49,8 @@ The main structure of the repository is as below:
     └── README.md
 
 ## index
-* [Setup and Run]('##Setup-and-Run')
-* [Development Starting Point and Framework]('##Development-Starting-Point-and-Framework')
+* [Setup and Run]('#Setup-and-Run')
+* [Development Starting Point and Framework]('#Development-Starting-Point-and-Framework')
 
 ## Setup and Run
 
