@@ -48,6 +48,10 @@ The main structure of the repository is as below:
     │       ├── schedule.py        # Python helper function for generate test data for auto and cart schedule
     └── README.md
 
+## index
+* [Setup and Run]('##Setup-and-Run')
+* [Development Starting Point and Framework]('##Development-Starting-Point-and-Framework')
+
 ## Setup and Run
 
 * Node.js enviroment setup
