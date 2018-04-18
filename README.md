@@ -267,6 +267,8 @@ In the design, Vehicle is the **generalization** for the Cart and Auto. CartRide
 
 ### Stored Procedure 
 
+Since Auto Ride and Cart Ride are fully participated in the specialization relationship with Appointment and every auto appointment should have selected drop off stop at the time making it, it is convenient and good for abstraction to provide insert_auto_ride store procedure which hides the implementation details about the specialization relationship to application program. The *insert_auto_ride* procedure firstly insert the auto appointment records to the Appointment table, then insert the additional attributes into the AutoRide table using the *last_insert_id()* function.  
+
 ```mysql
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_auto_ride`(stu_id int, sche_id int, pik_time time, pik_stop int, drop_stop int)
 begin
@@ -279,6 +281,8 @@ end
 ```
 
 ### Trigger
+
+Auto and Cart are fully participated in the generalization relationship with Vehicle. There are foreign keys *vehicle_id* in both table referencing to Vehicle table. Therefor, it is natural to create two triggers before the *insert* apperation on Auto and Cart Tables. 
 
 ```mysql
 CREATE DEFINER=`root`@`localhost` TRIGGER `CampusRide`.`Auto_BEFORE_INSERT` 
@@ -416,18 +420,16 @@ END
 
 ### View
 
+Each auto is associated with certain lines and start time in TimeTable. The frequent query about the auto time table should should support with certain pick up stop and drop off stop. Thus, creating a *View* for *stoptimetable* can simplify the query SQL. Since there are seldom *update* or *delete* operations on the associated tables, *TimeTable* and *Route*, there is little overhead for maintaining the view. Thus, it is much reasonable to create the view here.
+
  ```mysql
- CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_auto_ride`(stu_id int, sche_id int, pik_time time, pik_stop int, drop_stop int)
-begin
-	insert into Appointment(student_id, schedule_id, type, pick_up_time, pick_up_stop)
-	values(stu_id, sche_id, 'auto', pik_time, pik_stop);
-	set @apt_id = (select last_insert_id());
-	insert into AutoRide(apt_id, drop_off_stop)
-	values(@apt_id, drop_stop);
-end
+ | stoptimetable | CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY 
+ DEFINER VIEW `stoptimetable` AS select `linetable`.`line_id` AS `line_id`,`campusride`.`timetable`.`vehicle_id` AS `vehicle_id`,addtime(`campusride`.`timetable`.`start_time`,maketime(0,`linetable`.`time1`,0)) AS `pick_up_time`,`linetable`.`pick_up_stop` AS `pick_up_stop`,addtime(`campusride`.`timetable`.`start_time`,maketime(0,`linetable`.`time2`,0)) AS `drop_off_time`,`linetable`.`drop_off_stop` AS `drop_off_stop` from (((select `t1`.`line_id` AS `line_id`,`t1`.`time1` AS `time1`,`t2`.`time2` AS `time2`,`t1`.`stop_id1` AS `pick_up_stop`,`t2`.`stop_id2` AS `drop_off_stop` from (((select `campusride`.`route`.`line_id` AS `line_id`,`campusride`.`route`.`stop_id` AS `stop_id1`,`campusride`.`route`.`elapse_time` AS `time1` from `campusride`.`route`)) `T1` join (select `campusride`.`route`.`line_id` AS `line_id`,`campusride`.`route`.`stop_id` AS `stop_id2`,`campusride`.`route`.`elapse_time` AS `time2` from `campusride`.`route`) `T2` on((`t1`.`line_id` = `t2`.`line_id`))) where (`t1`.`time1` < `t2`.`time2`))) `LineTable` join `campusride`.`timetable` on((`linetable`.`line_id` = `campusride`.`timetable`.`line_id`)))
  ```
  
 ### Indexes
+
+In the MySql implementation, each foreign key should associated with a foreign key index. Since all the queries in *where* and *join* condition we used in [CRUD API](#crud-api) are key or foreign key attributes, there is no need for supplementary indexes created for the optimization. It is indeed better to create indexes for *pick_up_stop* and *drop_off_stop* columns on view table *stoptimetable*, but it seems that the views in MySQL is not materializated and can not create indexes on them.
 
 ## ToDo
 
