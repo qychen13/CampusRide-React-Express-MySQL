@@ -423,8 +423,40 @@ END
 Each auto is associated with certain lines and start time in TimeTable. The frequent query about the auto time table should should support with certain pick up stop and drop off stop. Thus, creating a *View* for *stoptimetable* can simplify the query SQL. Since there are seldom *update* or *delete* operations on the associated tables, *TimeTable* and *Route*, there is little overhead for maintaining the view. Thus, it is much reasonable to create the view here.
 
  ```mysql
- | stoptimetable | CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY 
- DEFINER VIEW `stoptimetable` AS select `linetable`.`line_id` AS `line_id`,`campusride`.`timetable`.`vehicle_id` AS `vehicle_id`,addtime(`campusride`.`timetable`.`start_time`,maketime(0,`linetable`.`time1`,0)) AS `pick_up_time`,`linetable`.`pick_up_stop` AS `pick_up_stop`,addtime(`campusride`.`timetable`.`start_time`,maketime(0,`linetable`.`time2`,0)) AS `drop_off_time`,`linetable`.`drop_off_stop` AS `drop_off_stop` from (((select `t1`.`line_id` AS `line_id`,`t1`.`time1` AS `time1`,`t2`.`time2` AS `time2`,`t1`.`stop_id1` AS `pick_up_stop`,`t2`.`stop_id2` AS `drop_off_stop` from (((select `campusride`.`route`.`line_id` AS `line_id`,`campusride`.`route`.`stop_id` AS `stop_id1`,`campusride`.`route`.`elapse_time` AS `time1` from `campusride`.`route`)) `T1` join (select `campusride`.`route`.`line_id` AS `line_id`,`campusride`.`route`.`stop_id` AS `stop_id2`,`campusride`.`route`.`elapse_time` AS `time2` from `campusride`.`route`) `T2` on((`t1`.`line_id` = `t2`.`line_id`))) where (`t1`.`time1` < `t2`.`time2`))) `LineTable` join `campusride`.`timetable` on((`linetable`.`line_id` = `campusride`.`timetable`.`line_id`)))
+ CREATE VIEW `stoptimetable`  AS 
+ SELECT 
+    `linetable`.`line_id` AS `line_id`,
+    `campusride`.`timetable`.`vehicle_id` AS `vehicle_id`,
+    ADDTIME(`campusride`.`timetable`.`start_time`,
+	    MAKETIME(0, `linetable`.`time1`, 0)) AS `pick_up_time`,
+    `linetable`.`pick_up_stop` AS `pick_up_stop`,
+    ADDTIME(`campusride`.`timetable`.`start_time`,
+	    MAKETIME(0, `linetable`.`time2`, 0)) AS `drop_off_time`,
+    `linetable`.`drop_off_stop` AS `drop_off_stop`
+ FROM
+    (((SELECT 
+	`t1`.`line_id` AS `line_id`,
+	    `t1`.`time1` AS `time1`,
+	    `t2`.`time2` AS `time2`,
+	    `t1`.`stop_id1` AS `pick_up_stop`,
+	    `t2`.`stop_id2` AS `drop_off_stop`
+    FROM
+	(((SELECT 
+	`campusride`.`route`.`line_id` AS `line_id`,
+	    `campusride`.`route`.`stop_id` AS `stop_id1`,
+	    `campusride`.`route`.`elapse_time` AS `time1`
+    FROM
+	`campusride`.`route`)) `T1`
+    JOIN (SELECT 
+	`campusride`.`route`.`line_id` AS `line_id`,
+	    `campusride`.`route`.`stop_id` AS `stop_id2`,
+	    `campusride`.`route`.`elapse_time` AS `time2`
+    FROM
+	`campusride`.`route`) `T2` ON ((`t1`.`line_id` = `t2`.`line_id`)))
+    WHERE
+	(`t1`.`time1` < `t2`.`time2`))) `LineTable`
+    JOIN `campusride`.`timetable` ON ((`linetable`.`line_id` = `campusride`.`timetable`.`line_id`)))
+ 
  ```
  
 ### Indexes
