@@ -57,7 +57,10 @@ The main structure of the repository is as below:
 * [Data Dictionary](#data-distionary)
 * [SQL Implementation Details](#sql-implementation-details)
 	* [Stored Procedure](#stored-procedure)
-* [ToDo](#todo)
+	* [Trigger](#trigger)
+	* [CRUI API](#crui-api)
+	* [View](#view)
+* [ToDo(Future Work)](#todo(future-work))
 * [References](#references)
 
 ## Setup and Run
@@ -238,7 +241,7 @@ The database design contains 13 tables. It has the following assumption/rules:
 
 In the design, Vehicle is the **generalization** for the Cart and Auto. CartRide and AutoRide are **specialization** for the Appointment with common attribute, *apt_id, student_id, schedule_id, rating, comment, pick_up_time and pick_up_stop*.  
 
-## Data Dictionary(Meta Data)
+## Data Dictionary
 
 ### Vehicle and Auto Time Table
 
@@ -425,7 +428,7 @@ end
  
 ### Indexes
 
-## ToDo (Future Work)
+## ToDo
 
 * Optimize Auto Time Table Query:
 
