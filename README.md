@@ -426,11 +426,11 @@ Each auto is associated with certain lines and start time in TimeTable. The freq
  CREATE VIEW `stoptimetable`  AS 
  SELECT 
     `linetable`.`line_id` AS `line_id`,
-    `campusride`.`timetable`.`vehicle_id` AS `vehicle_id`,
-    ADDTIME(`campusride`.`timetable`.`start_time`,
+    `timetable`.`vehicle_id` AS `vehicle_id`,
+    ADDTIME(`timetable`.`start_time`,
 	    MAKETIME(0, `linetable`.`time1`, 0)) AS `pick_up_time`,
-    `linetable`.`pick_up_stop` AS `pick_up_stop`,
-    ADDTIME(`campusride`.`timetable`.`start_time`,
+    `pick_up_stop` AS `pick_up_stop`,
+    ADDTIME(`timetable`.`start_time`,
 	    MAKETIME(0, `linetable`.`time2`, 0)) AS `drop_off_time`,
     `linetable`.`drop_off_stop` AS `drop_off_stop`
  FROM
@@ -442,20 +442,20 @@ Each auto is associated with certain lines and start time in TimeTable. The freq
 	    `t2`.`stop_id2` AS `drop_off_stop`
     FROM
 	(((SELECT 
-	`campusride`.`route`.`line_id` AS `line_id`,
-	    `campusride`.`route`.`stop_id` AS `stop_id1`,
-	    `campusride`.`route`.`elapse_time` AS `time1`
+	`route`.`line_id` AS `line_id`,
+	    `route`.`stop_id` AS `stop_id1`,
+	    `route`.`elapse_time` AS `time1`
     FROM
 	`campusride`.`route`)) `T1`
     JOIN (SELECT 
-	`campusride`.`route`.`line_id` AS `line_id`,
-	    `campusride`.`route`.`stop_id` AS `stop_id2`,
-	    `campusride`.`route`.`elapse_time` AS `time2`
+	`route`.`line_id` AS `line_id`,
+	    `route`.`stop_id` AS `stop_id2`,
+	    `route`.`elapse_time` AS `time2`
     FROM
-	`campusride`.`route`) `T2` ON ((`t1`.`line_id` = `t2`.`line_id`)))
+	`route`) `T2` ON ((`t1`.`line_id` = `t2`.`line_id`)))
     WHERE
 	(`t1`.`time1` < `t2`.`time2`))) `LineTable`
-    JOIN `campusride`.`timetable` ON ((`linetable`.`line_id` = `campusride`.`timetable`.`line_id`)))
+    JOIN `timetable` ON ((`linetable`.`line_id` = `timetable`.`line_id`)))
  
  ```
  
