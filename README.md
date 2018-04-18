@@ -60,6 +60,7 @@ The main structure of the repository is as below:
 	* [Trigger](#trigger)
 	* [CRUI API](#crui-api)
 	* [View](#view)
+	* [Indexes](#indexes)
 * [ToDo(Future Work)](#todo(future-work))
 * [References](#references)
 
