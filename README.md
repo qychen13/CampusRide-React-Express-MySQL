@@ -61,7 +61,7 @@ The main structure of the repository is as below:
 	* [CRUI API](#crui-api)
 	* [View](#view)
 	* [Indexes](#indexes)
-* [ToDo(Future Work)](#todo(future-work))
+* [ToDo(Future Work)](#todo)
 * [References](#references)
 
 ## Setup and Run
